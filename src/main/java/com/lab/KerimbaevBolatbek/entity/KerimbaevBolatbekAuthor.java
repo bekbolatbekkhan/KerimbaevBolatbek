@@ -1,4 +1,4 @@
-package com.lab.SalpykovDalel.entity;
+package com.lab.KerimbaevBolatbek.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

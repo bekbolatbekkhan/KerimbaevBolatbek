@@ -1,6 +1,6 @@
-package com.lab.SalpykovDalel.entity;
+package com.lab.KerimbaevBolatbek.entity;
 
-import com.lab.SalpykovDalel.entity.enums.KerimbaevBolatbekRole;
+import com.lab.KerimbaevBolatbek.entity.enums.KerimbaevBolatbekRole;
 import jakarta.persistence.*;
 import lombok.*;
 

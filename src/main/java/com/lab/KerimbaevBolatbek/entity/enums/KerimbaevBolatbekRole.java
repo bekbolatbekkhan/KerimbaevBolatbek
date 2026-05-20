@@ -1,4 +1,4 @@
-package com.lab.SalpykovDalel.entity.enums;
+package com.lab.KerimbaevBolatbek.entity.enums;
 
 public enum KerimbaevBolatbekRole {
     ROLE_USER,
