@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kerimbaev-library-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U library_user -d library_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - library-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: kerimbaev-library-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@library.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - library-network
+
+  # ===== NEW: Spring Boot application =====
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kerimbaev-library-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/library_db
+      SPRING_DATASOURCE_USERNAME: library_user
+      SPRING_DATASOURCE_PASSWORD: library_pass
+      JWT_SECRET: c2FscHlrb3ZkYWxlbHNlY3JldGtleWZvcmxpYnJhcnlhcHBsaWNhdGlvbjEyMzQ1Njc4OTA=
+      JWT_EXPIRATION: 86400000
+      FILE_UPLOAD_DIR: /app/uploads
+      LOG_FILE: /app/logs/application.log
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - app_uploads:/app/uploads
+      - app_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    networks:
+      - library-network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  app_uploads:
+  app_logs:
+
+networks:
+  library-network:
+    driver: bridge
