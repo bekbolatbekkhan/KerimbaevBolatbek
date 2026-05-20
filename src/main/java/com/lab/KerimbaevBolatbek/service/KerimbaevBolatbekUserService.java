@@ -47,3 +47,4 @@ public class KerimbaevBolatbekUserService {
                         "User with id " + id + " not found"));
     }
 }
+

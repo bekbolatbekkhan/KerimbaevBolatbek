@@ -64,3 +64,4 @@ public class KerimbaevBolatbekCategoryService {
                         "Category with id " + id + " not found"));
     }
 }
+

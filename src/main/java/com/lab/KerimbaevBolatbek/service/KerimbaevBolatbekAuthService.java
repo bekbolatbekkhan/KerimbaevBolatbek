@@ -92,3 +92,4 @@ public class KerimbaevBolatbekAuthService {
         return new KerimbaevBolatbekAuthResponse(token, user.getUsername(), user.getRole().name());
     }
 }
+

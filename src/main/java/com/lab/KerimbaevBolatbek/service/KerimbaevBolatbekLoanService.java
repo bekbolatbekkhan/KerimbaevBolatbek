@@ -125,3 +125,4 @@ public class KerimbaevBolatbekLoanService {
                         "Loan with id " + id + " not found"));
     }
 }
+
